@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+        <link rel="icon" type="image/png" href="dumbell.png">
+        <title>Weight Tracker</title>
+    </head>
+
+
+    <body style="background-color: darkgray">
+        <div class="container">
+            <h1 class="header" style="text-align: center;">Weight Tracker</h1>
+            
+            <a href="weight.html">Weight database</a>
+
+            <hr>
+
+            <form class="form" id="weightForm">
+                <p>Enter Name</p>
+                <select name="Name" id="name">
+                    <option value="Gian">Gian</option>
+                    <option value="Noah">Noah</option>
+                    <option value="Shyloh">Shyloh</option>
+                    <option value="Jackson">Jackson</option>
+                    <option value="Deuce">Deuce</option>
+                </select>
+                <p>Enter Workout</p>
+                <select name="workout" id="workout">
+                    <option value="Bench Press">Bench press</option>
+                    <option value="Pec Flys">Pec flys</option>
+                    <option value="Tricep Extensions">Tricep extensions</option>
+                    <option value="Flappy Birds">Flappy birds</option>
+                    <option value="Dips">Dips</option>
+                    <option value="Pull-Ups">Pull-ups</option>
+                    <option value="Triple Curls">Triple curls</option>
+                    <option value="Lat Pull Downs">Lat pull downs</option>
+                    <option value="Rows">Rows</option>
+                    <option value="Sit-Ups">Sit-ups</option>
+                    <option value="RDLs">RDLs</option>
+                    <option value="Kings Chair">Kings chair</option>
+                    <option value="Squats">Squats</option>
+                    <option value="Dead Lifts">Dead lifts</option>
+                    <option value="Leg Presses">Leg presses</option>
+                    <option value="Leg Curls">Leg curls</option>
+                    <option value="Thigh Ins">Thigh ins</option>
+                    <option value="Thigh Outs">Thigh outs</option>
+                </select>
+                <p>Enter weight (Lbs)</p>
+                <input type="number" id="weight">
+
+                <p></p>
+
+                <button type="submit" id="submitButton">Submit</button>
+                <p id="statusMessage" style="display: none; color: blue;">Weight saved successfully!</p>
+            </form>
+
+            <script>
+                document.getElementById("weightForm").addEventListener("submit", async (event) =>
+                    {
+                        event.preventDefault();
+                        
+                        const weightData =
+                        {
+                            name: document.getElementById("name").value,
+                            workout: document.getElementById("workout").value,
+                            weight: document.getElementById("weight").value
+                        };
+                        
+                        try
+                        {
+                            const res = await fetch("https://crk03tz8-3000.usw3.devtunnels.ms/save", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+                                body: JSON.stringify(weightData)
+                            });
+                            
+                            const statusMessage = document.getElementById("statusMessage");
+                            statusMessage.style.display = "block";
+                            statusMessage.style.color = "blue";
+                            statusMessage.textContent = "Weight saved successfully!";
+                            
+                            setTimeout(() =>
+                            {
+                                statusMessage.style.display = "none";
+                            }, 3000);
+                        }
+                        catch (err)
+                        {
+                            const statusMessage = document.getElementById("statusMessage");
+                            statusMessage.style.display = "block";
+                            statusMessage.style.color = "red";
+                            statusMessage.textContent = "Error saving weight. " + err;
+                            
+                            setTimeout(() =>
+                            {
+                                statusMessage.style.display = "none";
+                            }, 8000);
+                        }
+                    });
+            </script>
+            <noscript>Sorry your browser doesn't support JavaScript!</noscript>
+            <br>
+
+        </div>
+    </body>
+</html>

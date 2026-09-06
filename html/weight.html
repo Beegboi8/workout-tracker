@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="style.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+        <link href="https://fonts.googleapis.com/css2?family=Averia+Serif+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
+        <link rel="icon" type="image/png" href="dumbell.png">
+
+        <title>Weight database</title>
+    </head>
+
+    <body style="background-color: darkgray">
+
+        <div class="tableContainer">
+
+            <h1 class="header" style="text-align: center;">
+                Weight Record
+            </h1>
+
+            <a style="text-align: center;" href="index.html">
+                Main Page
+            </a>
+
+            <hr>
+
+            <h2>All Workouts</h2>
+
+            <table id="weightTable">
+
+                <thead style="text-align: center;">
+                    <tr>
+                        <th>Workout</th>
+                        <th>Gian</th>
+                        <th>Noah</th>
+                        <th>Shyloh</th>
+                        <th>Jackson</th>
+                        <th>Deuce</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tableBody">
+                </tbody>
+
+            </table>
+
+            <button id="refreshButton" onclick="loadWorkouts()">
+                Refresh Entries
+            </button>
+
+            <p id="statusMessage" style="display: none;">
+                Weight Updated!
+            </p>
+
+        </div>
+
+        <script>
+
+        const serverURL =
+            "https://crk03tz8-3000.usw3.devtunnels.ms";
+
+
+        async function loadWorkouts()
+        {
+            try
+            {
+                const response = await fetch(serverURL + "/workouts");
+
+                if (!response.ok)
+                {
+                    throw new Error("Server returned " + response.status);
+                }
+
+                const weight = await response.json();
+
+                const tableBody =
+                    document.getElementById("tableBody");
+
+                tableBody.innerHTML = "";
+
+
+                weight.forEach(weights =>
+                {
+                    tableBody.innerHTML += `
+                        <tr>
+
+                            <td>${weights.Workout}</td>
+
+                            <td>
+                                <input
+                                    type="number"
+                                    value="${weights.Gian ?? ""}"
+                                    data-name="Gian"
+                                    data-workout="${weights.Workout}"
+                                    onchange="saveWeight(this)"
+                                >
+                            </td>
+
+                            <td>
+                                <input
+                                    type="number"
+                                    value="${weights.Noah ?? ""}"
+                                    data-name="Noah"
+                                    data-workout="${weights.Workout}"
+                                    onchange="saveWeight(this)"
+                                >
+                            </td>
+
+                            <td>
+                                <input
+                                    type="number"
+                                    value="${weights.Shyloh ?? ""}"
+                                    data-name="Shyloh"
+                                    data-workout="${weights.Workout}"
+                                    onchange="saveWeight(this)"
+                                >
+                            </td>
+
+                            <td>
+                                <input
+                                    type="number"
+                                    value="${weights.Jackson ?? ""}"
+                                    data-name="Jackson"
+                                    data-workout="${weights.Workout}"
+                                    onchange="saveWeight(this)"
+                                >
+                            </td>
+
+                            <td>
+                                <input
+                                    type="number"
+                                    value="${weights.Deuce ?? ""}"
+                                    data-name="Deuce"
+                                    data-workout="${weights.Workout}"
+                                    onchange="saveWeight(this)"
+                                >
+                            </td>
+
+                        </tr>
+                    `;
+                });
+            }
+            catch (err)
+            {
+                console.error("Error loading workouts:", err);
+            }
+        }
+
+
+        async function saveWeight(input)
+        {
+            const weightData =
+            {
+                name: input.dataset.name,
+                workout: input.dataset.workout,
+                weight: input.value
+            };
+
+            try
+            {
+                const response = await fetch(serverURL + "/save",
+                {
+                    method: "POST",
+
+                    headers:
+                    {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(weightData)
+                });
+
+                if (!response.ok)
+                {
+                    const errorText = await response.text();
+
+                    throw new Error(errorText);
+                }
+
+                showStatus("Weight saved!", "blue");
+
+                console.log(
+                    "Saved:",
+                    weightData.name,
+                    weightData.workout,
+                    weightData.weight
+                );
+            }
+            catch (err)
+            {
+                console.error("Error saving weight:", err);
+
+                showStatus(
+                    "Error saving weight: " + err.message,
+                    "red"
+                );
+            }
+        }
+
+        function showStatus(message, color)
+        {
+            const statusMessage =
+                document.getElementById("statusMessage");
+
+            statusMessage.style.display = "block";
+            statusMessage.style.color = color;
+            statusMessage.textContent = message;
+
+            setTimeout(() =>
+            {
+                statusMessage.style.display = "none";
+            }, 3000);
+        }
+
+        loadWorkouts();
+
+        </script>
+
+    </body>
+</html>
