@@ -42,6 +42,7 @@
                         <th>Shyloh</th>
                         <th>Jackson</th>
                         <th>Deuce</th>
+                        <th>Levi</th>
                     </tr>
                 </thead>
 
@@ -142,6 +143,15 @@
                                 >
                             </td>
 
+                            <td>
+                                <input
+                                    type="number"
+                                    value="${weights.Levi ?? ""}"
+                                    data-name="Levi"
+                                    data-workout="${weights.Workout}"
+                                    onchange="saveWeight(this)"
+                                >
+                            </td>
                         </tr>
                     `;
                 });

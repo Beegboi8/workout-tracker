@@ -57,6 +57,7 @@ button:hover {
     margin: 0px auto;
     padding: 0px;
     text-align: center;
+    border-collapse: collapse;
 }
 
 table {
@@ -69,6 +70,7 @@ table {
     padding: 5px;
     border-radius: 12px;
     text-align: center;
+    width: 100%
 }
 
 th {
@@ -127,4 +129,43 @@ tr:hover {
   font-family: "Averia Serif Libre", serif;
   font-weight: 700;
   font-style: italic;
+}
+
+@media (max-width: 600px) {
+
+    .tableContainer {
+        width: 100%;
+        max-width: none;
+        padding: 0 5px;
+        box-sizing: border-box;
+    }
+
+    #weightTable {
+        width: 100%;
+        max-width: none;
+        table-layout: fixed;
+        font-size: 12px;
+    }
+
+    #weightTable th,
+    #weightTable td {
+        padding: 5px 1px;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        font-size: 9px;
+    }
+
+    #weightTable th {
+        font-size: 10px;
+        padding: 6px 1px;
+    }
+
+    #weightTable input {
+        width: 90%;
+        box-sizing: border-box;
+        padding: 3px 1px;
+        margin: 2px 0;
+        font-size: 12px;
+    }
+
 }
