@@ -12,4 +12,4 @@ node_modules/
 Thumbs.db
 
 # Database
-*.db
+weightData.db
